@@ -15,7 +15,7 @@ import com.tumblr.jumblr.types.Blog;
 public class GuestActivity extends AppCompatActivity {
 
     private TextView guest_textView;
-    private String blogList[] = {"iwuvhugs.tumblr.com", "onetouchonelie.tumblr.com", "theclassyissue.com", "whiskey-please.tumblr.com", "lookwhatifound.ru"};
+    private String blogList[] = {"iwuvhugs.tumblr.com", "onetouchonelie.tumblr.com", "theclassyissue.com", "lookwhatifound.ru"};
 
 
     private RecyclerView mRecyclerView;
