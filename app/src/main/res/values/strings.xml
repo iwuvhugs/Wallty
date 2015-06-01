@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wallty</string>
+
+    <!-- Launch Activity -->
+    <string name="launch_button_login">I\'m Tumblr user</string>
+    <string name="launch_button_guest">I have no Tumblr account</string>
+    <string name="launch_button_discover">Discover Tumblr</string>
+
+    <!-- Main Activity -->
+    <string name="title_activity_main">Your Tumblr</string>
+    <string name="username_avatar">userpic</string>
+    <string name="settings">Settings</string>
+    <string name="repeat">Repeat every:</string>
+    <string name="select">Select randomly from last</string>
+    <string name="source">Pictures source</string>
+    <string name="likes">Likes</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <string name="posts">Posts</string>
+    <string name="get_new_wallpaper">Get new wallpaper</string>
+    <string name="welcome">Welcome</string>
+    <string name="switcher_on">On</string>
+    <string name="switcher_off">Off</string>
+
+    <!-- Main Activity Menu -->
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_update">Refresh</string>
+    <string name="action_rate_app">Rate</string>
+    <string name="action_share">Share</string>
+
+    <!-- Guest Activity -->
+    <string name="title_activity_guest">GuestActivity</string>
+
+    <!-- Share -->
+    <string name="share_text">Hello! Check that cool app</string>
+    <string name="share_title">Wallty</string>
+
+    <!-- Dialogs -->
+    <string name="please_wait">Please wait</string>
+    <string name="info">Info</string>
+    <string name="check_internet">Check your connection and try again</string>
+    <string name="rate">Rate Wallty</string>
+    <string name="rate_alert">Like Wallty? You can make app better. Share any of your ideas in comments or just take a moment to rate. Thanks for support!</string>
+    <string name="newbie">New on Tumblr?</string>
+    <string name="newbie_alert">You have little posts for Wallty to select from. Follow some blogs, like and repost some posts and Wallty will work better</string>
+    <string name="alert">Alert</string>
+    <string name="auth_alert">Can\'t authorize. Check your device time and timezone and set correct ones (automatic time and timezone are preferable)</string>
+
+    <!-- Toasts -->
+    <string name="wallty_set">Wallty Set</string>
+    <string name="wallty_cancel">Wallty Cancel</string>
+    <string name="wallty_fail_loading">Try to load a new wallpaper later</string>
+
+    <!-- Wallty settings -->
+    <string-array name="alarm_intervals">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>half-day</item>
+        <item>day</item>
+    </string-array>
+    <string-array name="select_randomly_from">
+        <item>15 posts</item>
+        <item>30 posts</item>
+        <item>50 posts</item>
+    </string-array>
+    <string-array name="pictures_source">
+        <item>your likes</item>
+        <item>dashboard</item>
+        <item>your blog</item>
+    </string-array>
+
+
+</resources>
