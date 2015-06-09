@@ -3,6 +3,7 @@ package com.iwuvhugs.wallty;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
@@ -45,6 +46,9 @@ public class WalltyApplication extends Application {
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
+    public static Typeface dinRoundProRegular;
+
+
     public static synchronized WalltyApplication getInstance() {
         return instance;
     }
@@ -61,9 +65,16 @@ public class WalltyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        
+        initFonts();
 //        interstitialAppLaunchCounter();
         showRateDialogAppLaunchCounter();
 
+    }
+
+    private void initFonts() {
+
+        dinRoundProRegular = Typeface.createFromAsset(getAssets(), "DINRoundPro-Regular.otf");
     }
 
     synchronized Tracker getTracker(TrackerName trackerId) {

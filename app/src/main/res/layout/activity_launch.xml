@@ -1,27 +1,52 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/launch_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.iwuvhugs.wallty.LaunchActivity">
 
+    <ImageView
+        android:id="@+id/lauch_logo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="64dp"
+        android:layout_marginRight="64dp" />
 
     <Button
         android:id="@+id/sign_in"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_above="@+id/unsigned_user"
+        android:layout_alignEnd="@+id/unsigned_user"
+        android:layout_alignLeft="@+id/unsigned_user"
+        android:layout_alignRight="@+id/unsigned_user"
+        android:layout_alignStart="@+id/unsigned_user"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
+        android:alpha="0"
+        android:background="@drawable/green_button"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
         android:text="@string/launch_button_login"
-        android:textSize="16sp"></Button>
+        android:textColor="@android:color/white"
+        android:textSize="14sp"></Button>
+
 
     <Button
         android:id="@+id/unsigned_user"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_above="@+id/discover"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
+        android:alpha="0"
+        android:background="@drawable/green_button"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
         android:text="@string/launch_button_guest"
-        android:textSize="16sp"></Button>
+        android:textColor="@android:color/white"
+        android:textSize="14sp"></Button>
 
     <TextView
         android:id="@+id/discover"
@@ -30,8 +55,10 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="24dp"
+        android:alpha="0"
         android:gravity="center"
         android:text="@string/launch_button_discover"
-        android:textSize="16sp" />
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
 
 </RelativeLayout>

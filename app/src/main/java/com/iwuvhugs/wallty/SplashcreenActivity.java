@@ -2,24 +2,53 @@ package com.iwuvhugs.wallty;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.Display;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.iwuvhugs.wallty.tumblrauth.TumblrHelper;
+import com.iwuvhugs.wallty.utils.Functions;
 
 
 public class SplashcreenActivity extends Activity {
+
+    private static final String LOGTAG = SplashcreenActivity.class.getSimpleName();
+
+    private ImageView splashLogo;
+    private RelativeLayout splashBackground;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashcreen);
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        splashLogo = (ImageView) findViewById(R.id.splash_logo);
+        splashBackground = (RelativeLayout) findViewById(R.id.splash_background);
+
+        splashBackground.setBackground(new BitmapDrawable(getResources(), Functions.decodeSampledBitmapFromResource(getResources(), R.drawable.splash_background, width, height)));
+        splashLogo.setImageBitmap(Functions.decodeSampledBitmapFromResource(getResources(), R.drawable.splash_logo, (int) (width - (Functions.convertDpToPixel(128f))), (int) (width - (Functions.convertDpToPixel(128f)))));
+
+        splashLogo.setScaleX(1.04f);
+        splashLogo.setScaleY(1.04f);
+        splashLogo.setAlpha(0.2f);
+
+        splashLogo.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(1000);
 
         new Thread() {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {

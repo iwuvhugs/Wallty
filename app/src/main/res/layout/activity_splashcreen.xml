@@ -1,13 +1,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/splash_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.iwuvhugs.wallty.SplashcreenActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/splash_logo"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="SPLASH" />
+        android:layout_marginLeft="64dp"
+        android:layout_marginRight="64dp" />
 
 </RelativeLayout>

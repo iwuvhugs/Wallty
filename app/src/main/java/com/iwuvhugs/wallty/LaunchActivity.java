@@ -4,11 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -18,6 +25,7 @@ import com.iwuvhugs.wallty.dialogs.AuthProblemDialog;
 import com.iwuvhugs.wallty.dialogs.NoConnectionDialog;
 import com.iwuvhugs.wallty.tumblrauth.Constants;
 import com.iwuvhugs.wallty.tumblrauth.TumblrHelper;
+import com.iwuvhugs.wallty.utils.Functions;
 
 
 public class LaunchActivity extends Activity implements View.OnClickListener {
@@ -29,10 +37,18 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
     private AlertDialog noConnectionDialog;
     private AlertDialog authProblemDialog;
 
+    private ImageView launchLogo;
+    private RelativeLayout launchBackground;
+
+    private Button sign_in;
+    private Button unsigned_user;
+    private TextView discover;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(0, 0);
 
         // Get tracker.
         Tracker t = ((WalltyApplication) getApplication()).getTracker(WalltyApplication.TrackerName.APP_TRACKER);
@@ -54,11 +70,35 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_launch);
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
 
-        findViewById(R.id.sign_in).setOnClickListener(this);
-        findViewById(R.id.unsigned_user).setOnClickListener(this);
-        findViewById(R.id.discover).setOnClickListener(this);
 
+        launchLogo = (ImageView) findViewById(R.id.lauch_logo);
+        launchBackground = (RelativeLayout) findViewById(R.id.launch_background);
+
+        launchBackground.setBackground(new BitmapDrawable(getResources(), Functions.decodeSampledBitmapFromResource(getResources(), R.drawable.splash_background, width, height)));
+        launchLogo.setImageBitmap(Functions.decodeSampledBitmapFromResource(getResources(), R.drawable.splash_logo, (int) (width - (Functions.convertDpToPixel(128f))), (int) (width - (Functions.convertDpToPixel(128f)))));
+
+
+        sign_in = (Button) findViewById(R.id.sign_in);
+        unsigned_user = (Button) findViewById(R.id.unsigned_user);
+        discover = (TextView) findViewById(R.id.discover);
+
+        sign_in.setTypeface(WalltyApplication.dinRoundProRegular);
+        unsigned_user.setTypeface(WalltyApplication.dinRoundProRegular);
+        discover.setTypeface(WalltyApplication.dinRoundProRegular);
+
+        sign_in.animate().setStartDelay(100).alpha(1f).translationYBy(Functions.convertDpToPixel(-56f)).setDuration(1100);
+        unsigned_user.animate().setStartDelay(200).alpha(1f).translationYBy(Functions.convertDpToPixel(-56f)).setDuration(1000);
+        discover.animate().setStartDelay(900).alpha(1f).setDuration(400);
+
+        sign_in.setOnClickListener(this);
+        unsigned_user.setOnClickListener(this);
+        discover.setOnClickListener(this);
     }
 
     @Override
