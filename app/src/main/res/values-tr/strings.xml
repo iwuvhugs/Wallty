@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wallty</string>
+
+    <!-- Launch Activity -->
+    <string name="launch_button_login">Ben Tumblr kullanıcı değilim</string>
+    <string name="launch_button_guest">Tumblr hesabı olmadan girin</string>
+    <string name="launch_button_discover">Keşfedin Tumblr</string>
+
+    <!-- Main Activity -->
+    <string name="title_activity_main">Senin Tumblr</string>
+    <string name="username_avatar">userpic</string>
+    <string name="settings">Ayarlar</string>
+    <string name="repeat">Her tekrarlayın:</string>
+    <string name="select">Son rastgele seçin</string>
+    <string name="source">Resim kaynağı</string>
+    <string name="likes">Beğendiklerim</string>
+    <string name="followers">Takipçiler</string>
+    <string name="following">Takip ettiklerim</string>
+    <string name="posts">Gönderiler</string>
+    <string name="get_new_wallpaper">Yeni duvar kağıdı alın</string>
+    <string name="welcome">Hoşgeldiniz</string>
+
+
+    <!-- Main Activity Menu -->
+    <string name="action_settings">Ayarlar</string>
+    <string name="action_logout">Çıkış</string>
+    <string name="action_update">Güncelleştirmek</string>
+    <string name="action_rate_app">Puan</string>
+    <string name="action_share">Paylaşmak</string>
+
+    <!-- Guest Activity -->
+    <string name="title_activity_guest">Welcome</string>
+    <string name="select_blog">Seç blog</string>
+
+    <!-- Share -->
+    <string name="share_text">Merhaba! O serin app kontrol</string>
+    <string name="share_title">Wallty</string>
+
+    <!-- Dialogs -->
+    <string name="please_wait">Lütfen bekleyin</string>
+    <string name="info">Bilgi</string>
+    <string name="check_internet">Bağlantınızı kontrol edin ve tekrar deneyin</string>
+    <string name="rate">Puan Wallty</string>
+    <string name="rate_alert">Wallty gibi mi? Sen uygulaması daha iyi yapabilir. Görüşleri fikirlerinizi paylaşın ya da sadece herhangi bir oran için bir dakikanızı ayırın. Desteğiniz için teşekkürler!</string>
+    <string name="newbie">Tumblr Yeni?</string>
+    <string name="newbie_alert">Sen seçmek için Wallty için küçük mesajları var. Bazı bloglar takip gibi bazı mesajları Repost ve Wallty daha iyi çalışır</string>
+    <string name="alert">Uyanık</string>
+    <string name="auth_alert">Yetki olamaz. Cihaz saatini ve saat dilimini ve set doğru olanları (otomatik zaman dilimi ve tercih edilir) kontrol</string>
+
+    <!-- Toasts -->
+    <string name="wallty_set">Wallty Seti</string>
+    <string name="wallty_cancel">İptal Wallty</string>
+    <string name="wallty_fail_loading">Daha sonra yeni bir duvar kağıdı yüklemek için çalışın</string>
+
+    <!-- Wallty settings -->
+    <string-array name="alarm_intervals">
+        <item>15 dakika</item>
+        <item>30 dakika</item>
+        <item>1 saat</item>
+        <item>yarım gün</item>
+        <item>gün</item>
+    </string-array>
+    <string-array name="select_randomly_from">
+        <item>15 gönderiler</item>
+        <item>30 gönderiler</item>
+        <item>50 gönderiler</item>
+    </string-array>
+    <string-array name="pictures_source">
+        <item>beğendiklerim</item>
+        <item>pano</item>
+        <item>blogunuzun</item>
+    </string-array>
+
+</resources>

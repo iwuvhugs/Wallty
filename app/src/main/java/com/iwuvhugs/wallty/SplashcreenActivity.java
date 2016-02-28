@@ -38,11 +38,11 @@ public class SplashcreenActivity extends Activity {
         splashBackground.setBackground(new BitmapDrawable(getResources(), Functions.decodeSampledBitmapFromResource(getResources(), R.drawable.splash_background, width, height)));
         splashLogo.setImageBitmap(Functions.decodeSampledBitmapFromResource(getResources(), R.drawable.splash_logo, (int) (width - (Functions.convertDpToPixel(128f))), (int) (width - (Functions.convertDpToPixel(128f)))));
 
-        splashLogo.setScaleX(1.04f);
-        splashLogo.setScaleY(1.04f);
-        splashLogo.setAlpha(0.2f);
+        splashLogo.setScaleX(1.05f);
+        splashLogo.setScaleY(1.05f);
+        splashLogo.setAlpha(0f);
 
-        splashLogo.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(1000);
+        splashLogo.animate().scaleX(1f).scaleY(1f).alpha(1f).setDuration(900);
 
         new Thread() {
             @Override

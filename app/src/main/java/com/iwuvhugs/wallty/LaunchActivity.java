@@ -40,8 +40,8 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
     private ImageView launchLogo;
     private RelativeLayout launchBackground;
 
-    private Button sign_in;
-    private Button unsigned_user;
+    private Button signIn;
+    private Button unsignedUser;
     private TextView discover;
 
 
@@ -84,20 +84,20 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
         launchLogo.setImageBitmap(Functions.decodeSampledBitmapFromResource(getResources(), R.drawable.splash_logo, (int) (width - (Functions.convertDpToPixel(128f))), (int) (width - (Functions.convertDpToPixel(128f)))));
 
 
-        sign_in = (Button) findViewById(R.id.sign_in);
-        unsigned_user = (Button) findViewById(R.id.unsigned_user);
+        signIn = (Button) findViewById(R.id.sign_in);
+        unsignedUser = (Button) findViewById(R.id.unsigned_user);
         discover = (TextView) findViewById(R.id.discover);
 
-        sign_in.setTypeface(WalltyApplication.dinRoundProRegular);
-        unsigned_user.setTypeface(WalltyApplication.dinRoundProRegular);
+        signIn.setTypeface(WalltyApplication.dinRoundProRegular);
+        unsignedUser.setTypeface(WalltyApplication.dinRoundProRegular);
         discover.setTypeface(WalltyApplication.dinRoundProRegular);
 
-        sign_in.animate().setStartDelay(100).alpha(1f).translationYBy(Functions.convertDpToPixel(-56f)).setDuration(1100);
-        unsigned_user.animate().setStartDelay(200).alpha(1f).translationYBy(Functions.convertDpToPixel(-56f)).setDuration(1000);
+        signIn.animate().setStartDelay(100).alpha(1f).translationYBy(Functions.convertDpToPixel(-56f)).setDuration(1100);
+        unsignedUser.animate().setStartDelay(200).alpha(1f).translationYBy(Functions.convertDpToPixel(-56f)).setDuration(1000);
         discover.animate().setStartDelay(900).alpha(1f).setDuration(400);
 
-        sign_in.setOnClickListener(this);
-        unsigned_user.setOnClickListener(this);
+        signIn.setOnClickListener(this);
+        unsignedUser.setOnClickListener(this);
         discover.setOnClickListener(this);
     }
 
@@ -192,8 +192,9 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
                 TumblrHelper.logOutOfTumblr(this);
             }
             Intent tumblrLoginIntent = new Intent(this, TumblrLoginActivity.class);
-            tumblrLoginIntent.putExtra(TumblrLoginActivity.TUMBLR_CONSUMER_KEY, TumblrHelper.CONSUMER_KEY);
-            tumblrLoginIntent.putExtra(TumblrLoginActivity.TUMBLR_CONSUMER_SECRET, TumblrHelper.CONSUMER_SECRET);
+            // Pass secret keys provided by Tumblr
+            tumblrLoginIntent.putExtra(TumblrLoginActivity.TUMBLR_CONSUMER_KEY, getResources().getString(R.string.CONSUMER_KEY));
+            tumblrLoginIntent.putExtra(TumblrLoginActivity.TUMBLR_CONSUMER_SECRET, getResources().getString(R.string.CONSUMER_SECRET));
             startActivityForResult(tumblrLoginIntent, REQUEST_CODE_TUMBLR_LOGIN);
         } else {
             noConnectionDialogAction();

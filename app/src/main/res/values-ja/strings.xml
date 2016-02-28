@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wallty</string>
+
+    <!-- Launch Activity -->
+    <string name="launch_button_login">私がTumblrのユーザーだ</string>
+    <string name="launch_button_guest">Tumblrのなしで入力します。</string>
+    <string name="launch_button_discover">Tumblr発見</string>
+
+    <!-- Main Activity -->
+    <string name="title_activity_main">Tumblrあなたの</string>
+    <string name="username_avatar">userpic</string>
+    <string name="settings">設定</string>
+    <string name="repeat">すべてのを繰り返します。</string>
+    <string name="select">最後からランダムに選択し、</string>
+    <string name="source">絵ソース</string>
+    <string name="likes">スキ</string>
+    <string name="followers">ファン</string>
+    <string name="following">フォロー中</string>
+    <string name="posts">投稿数</string>
+    <string name="get_new_wallpaper">新たな背景画像を取得する</string>
+    <string name="welcome">歓迎</string>
+
+
+    <!-- Main Activity Menu -->
+    <string name="action_settings">設定</string>
+    <string name="action_logout">ログアウト</string>
+    <string name="action_update">更新</string>
+    <string name="action_rate_app">レート</string>
+    <string name="action_share">シェア</string>
+
+    <!-- Guest Activity -->
+    <string name="title_activity_guest">ようこそ</string>
+    <string name="select_blog">セレクトブログ</string>
+
+    <!-- Share -->
+    <string name="share_text">こんにちは！そのクールなアプリをチェック</string>
+    <string name="share_title">Wallty</string>
+
+    <!-- Dialogs -->
+    <string name="please_wait">お待ちください</string>
+    <string name="info">インフォ</string>
+    <string name="check_internet">あなたの接続を確認し、再試行してください</string>
+    <string name="rate">レート Wallty</string>
+    <string name="rate_alert">Walltyの写真あなたは、アプリをより良くすることができます。コメントにあなたのアイデアのいずれかを共有したり、単にレートに時間を取る。サポートをありがとう！</string>
+    <string name="newbie">Tumblrでは初めてですか？</string>
+    <string name="newbie_alert">あなたは、から選択するWalltyのために少し投稿があり。いくつかのブログに従ってください、のような、いくつかの記事を再投稿してWalltyは良い仕事します</string>
+    <string name="alert">警告</string>
+    <string name="auth_alert">認可することはできません。お使いのデバイスの時刻とタイムゾーン設定、正しいものを（自動時刻とタイムゾーンが好ましい）をチェック</string>
+
+    <!-- Toasts -->
+    <string name="wallty_set">セットWallty</string>
+    <string name="wallty_cancel">キャンセルWallty</string>
+    <string name="wallty_fail_loading">後で新しい壁紙をロードしよう</string>
+
+    <!-- Wallty settings -->
+    <string-array name="alarm_intervals">
+        <item>15分</item>
+        <item>30分</item>
+        <item>1時間</item>
+        <item>半日</item>
+        <item>日</item>
+    </string-array>
+    <string-array name="select_randomly_from">
+        <item>15 投稿数</item>
+        <item>30 投稿数</item>
+        <item>50 投稿数</item>
+    </string-array>
+    <string-array name="pictures_source">
+        <item>スキ</item>
+        <item>ダッシュボード</item>
+        <item>あなたのブログ</item>
+    </string-array>
+
+</resources>

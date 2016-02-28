@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
-import com.iwuvhugs.wallty.MainActivity;
 import com.iwuvhugs.wallty.R;
 import com.iwuvhugs.wallty.WalltyApplication;
 
@@ -43,7 +42,7 @@ public class RateAppDialog extends AlertDialog {
             public void onClick(DialogInterface dialog, int which) {
 
                 try {
-                    ((MainActivity) context).rateApp();
+                    WalltyApplication.getInstance().rateApp();
                     WalltyApplication.getInstance().setNeverShowRateDialog();
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -11,11 +11,13 @@ import android.util.Log;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader.ImageContainer;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
+import com.iwuvhugs.wallty.R;
 import com.iwuvhugs.wallty.WalltyApplication;
 import com.iwuvhugs.wallty.tumblrauth.Constants;
 import com.iwuvhugs.wallty.tumblrauth.TumblrHelper;
 import com.iwuvhugs.wallty.utils.WalltySettingsManager;
 import com.tumblr.jumblr.JumblrClient;
+import com.tumblr.jumblr.types.Blog;
 import com.tumblr.jumblr.types.Photo;
 import com.tumblr.jumblr.types.PhotoPost;
 import com.tumblr.jumblr.types.Post;
@@ -30,182 +32,260 @@ import java.util.Random;
 
 public class WalltySchedulingService extends IntentService {
 
-	private static final String LOGTAG = WalltySchedulingService.class.getSimpleName();
+    private static final String LOGTAG = WalltySchedulingService.class.getSimpleName();
 
-	public WalltySchedulingService() {
-		super("WalltySchedulingService");
-	}
+    public WalltySchedulingService() {
+        super("WalltySchedulingService");
+    }
 
-	@Override
-	protected void onHandleIntent(Intent intent) {
+    @Override
+    protected void onHandleIntent(Intent intent) {
 
-		try {
-			if (WalltyApplication.getInstance().isOnline()) {
-				if (!(TumblrHelper.getToken(getApplicationContext()).equals("")) && !(TumblrHelper.getTokenSecret(getApplicationContext()).equals(""))) {
+        try {
+            if (WalltyApplication.getInstance().isOnline()) {
+                SharedPreferences sharedPrefs = getApplicationContext().getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
+                int login_mode = sharedPrefs.getInt(Constants.PICTURES_SOURCE, 0);
 
-					JumblrClient client = WalltyApplication.getClient(TumblrHelper.CONSUMER_KEY, TumblrHelper.CONSUMER_SECRET);
-					client.setToken(TumblrHelper.getToken(getApplicationContext()), TumblrHelper.getTokenSecret(getApplicationContext()));
+                switch (login_mode) {
+                    case 1:
+                        if (!(TumblrHelper.getToken(getApplicationContext()).equals("")) && !(TumblrHelper.getTokenSecret(getApplicationContext()).equals(""))) {
 
-					User user = client.user();
+                            JumblrClient client = WalltyApplication.getClient(getApplicationContext().getResources().getString(R.string.CONSUMER_KEY),
+                                    getApplicationContext().getResources().getString(R.string.CONSUMER_SECRET));
+                            client.setToken(TumblrHelper.getToken(getApplicationContext()), TumblrHelper.getTokenSecret(getApplicationContext()));
 
-					if (user != null) {
+                            User user = client.user();
 
-						boolean success = false;
-						int i = 0;
+                            if (user != null) {
 
-						while (!success && i < 3) {
-							if (WalltyApplication.DEVELOPER_MODE)
-								Log.e(LOGTAG, "user != null");
+                                boolean success = false;
+                                int i = 0;
 
-							// int likes_count = user.getLikeCount();
-							// Log.e(LOGTAG, "likes_count " + likes_count);
+                                while (!success && i < 3) {
+                                    if (WalltyApplication.DEVELOPER_MODE)
+                                        Log.e(LOGTAG, "user != null");
 
-							Random rand = new Random();
-							// nextInt is normally exclusive of the top
-							// value,
-							// so add 1 to make it inclusive
+                                    // int likes_count = user.getLikeCount();
+                                    // Log.e(LOGTAG, "likes_count " + likes_count);
 
-							SharedPreferences sharedPrefs = getApplicationContext().getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
-							int limit = sharedPrefs.getInt(Constants.SELECTION_SPINNER_POSITION, 1);
+                                    Random rand = new Random();
+                                    // nextInt is normally exclusive of the top
+                                    // value,
+                                    // so add 1 to make it inclusive
 
-							if (WalltyApplication.DEVELOPER_MODE)
-								Log.e(LOGTAG, "TEST LIMIT " + WalltySettingsManager.getSelection(limit));
+                                    int limit = sharedPrefs.getInt(Constants.SELECTION_SPINNER_POSITION, 1);
 
-							Map<String, Integer> options = new HashMap<String, Integer>();
-							options.put("limit", WalltySettingsManager.getSelection(limit));
-							options.put("offset", 0);
+                                    if (WalltyApplication.DEVELOPER_MODE)
+                                        Log.e(LOGTAG, "TEST LIMIT " + WalltySettingsManager.getSelection(limit));
 
-							int source = sharedPrefs.getInt(Constants.PICTURES_SOURCE, 0);
+                                    Map<String, Integer> options = new HashMap<String, Integer>();
+                                    options.put("limit", WalltySettingsManager.getSelection(limit));
+                                    options.put("offset", 0);
 
-							if (WalltyApplication.DEVELOPER_MODE)
-								Log.e(LOGTAG, "TEST SOURCE " + source);
+                                    int source = sharedPrefs.getInt(Constants.PICTURES_SOURCE, 0);
 
-							List<Post> posts = new ArrayList<Post>();
+                                    if (WalltyApplication.DEVELOPER_MODE)
+                                        Log.e(LOGTAG, "TEST SOURCE " + source);
 
-							switch (source) {
-							case 0:
-								/* List<Post> */
-								posts = user.getClient().userLikes(options);
-								if (WalltyApplication.DEVELOPER_MODE)
-									Log.e(LOGTAG, "posts " + posts.size());
-								break;
-							case 1:
-								posts = user.getClient().userDashboard(options);
-								if (WalltyApplication.DEVELOPER_MODE)
-									Log.e(LOGTAG, "DASHBOARD");
-								break;
-							case 2:
-								posts = user.getBlogs().get(0).posts(options);
-								if (WalltyApplication.DEVELOPER_MODE)
-									Log.e(LOGTAG, "BLOGS  " + user.getBlogs().size());
-								break;
-							}
+                                    List<Post> posts = new ArrayList<Post>();
 
-							int randomNum = rand.nextInt(posts.size());
-							Post post = posts.get(randomNum);
+                                    switch (source) {
+                                        case 0:
+                                /* List<Post> */
+                                            posts = user.getClient().userLikes(options);
+                                            if (WalltyApplication.DEVELOPER_MODE)
+                                                Log.e(LOGTAG, "posts " + posts.size());
+                                            break;
+                                        case 1:
+                                            posts = user.getClient().userDashboard(options);
+                                            if (WalltyApplication.DEVELOPER_MODE)
+                                                Log.e(LOGTAG, "DASHBOARD");
+                                            break;
+                                        case 2:
+                                            posts = user.getBlogs().get(0).posts(options);
+                                            if (WalltyApplication.DEVELOPER_MODE)
+                                                Log.e(LOGTAG, "BLOGS  " + user.getBlogs().size());
+                                            break;
+                                    }
 
-							if (post.getType().equals("photo")) {
-								if (WalltyApplication.DEVELOPER_MODE)
-									Log.e(LOGTAG, "photoPost         : " + ((PhotoPost) post).getPhotos().size());
-								if (((PhotoPost) post).getPhotos().size() == 1) {
-									List<Photo> photos = ((PhotoPost) post).getPhotos();
-									for (final Photo photo : photos) {
-										if (WalltyApplication.DEVELOPER_MODE)
-											Log.e(LOGTAG, "photoSize      : " + photo.getOriginalSize().getUrl());
-										success = true;
-										loadImage(photo.getOriginalSize().getUrl()/*
-																				 * ,
+                                    int randomNum = rand.nextInt(posts.size());
+                                    Post post = posts.get(randomNum);
+
+                                    if (post.getType().equals("photo")) {
+                                        if (WalltyApplication.DEVELOPER_MODE)
+                                            Log.e(LOGTAG, "photoPost         : " + ((PhotoPost) post).getPhotos().size());
+                                        if (((PhotoPost) post).getPhotos().size() == 1) {
+                                            List<Photo> photos = ((PhotoPost) post).getPhotos();
+                                            for (final Photo photo : photos) {
+                                                if (WalltyApplication.DEVELOPER_MODE)
+                                                    Log.e(LOGTAG, "photoSize      : " + photo.getOriginalSize().getUrl());
+                                                success = true;
+                                                loadImage(photo.getOriginalSize().getUrl()/*
+                                                                                 * ,
 																				 * bundle
 																				 */);
-									}
-								} else {
-									Random randSet = new Random();
-									int randomNumSet = randSet.nextInt(((PhotoPost) post).getPhotos().size());
-									if (WalltyApplication.DEVELOPER_MODE)
-										Log.e(LOGTAG, "photoPost size  " + ((PhotoPost) post).getPhotos().size() + " photoPost   " + ((PhotoPost) post).getPhotos().get(randomNumSet).getOriginalSize().getUrl());
-									success = true;
-									loadImage(((PhotoPost) post).getPhotos().get(randomNumSet).getOriginalSize().getUrl()/* */);
-								}
-							} else {
-								if (WalltyApplication.DEVELOPER_MODE)
-									Log.e(LOGTAG, "post " + post.getType());
-							}
+                                            }
+                                        } else {
+                                            Random randSet = new Random();
+                                            int randomNumSet = randSet.nextInt(((PhotoPost) post).getPhotos().size());
+                                            if (WalltyApplication.DEVELOPER_MODE)
+                                                Log.e(LOGTAG, "photoPost size  " + ((PhotoPost) post).getPhotos().size() + " photoPost   " + ((PhotoPost) post).getPhotos().get(randomNumSet).getOriginalSize().getUrl());
+                                            success = true;
+                                            loadImage(((PhotoPost) post).getPhotos().get(randomNumSet).getOriginalSize().getUrl()/* */);
+                                        }
+                                    } else {
+                                        if (WalltyApplication.DEVELOPER_MODE)
+                                            Log.e(LOGTAG, "post " + post.getType());
+                                    }
 
-							i++;
-						}
-					} else {
-						if (WalltyApplication.DEVELOPER_MODE)
-							Log.e(LOGTAG, "user == null");
-					}
+                                    i++;
+                                }
+                            } else {
+                                if (WalltyApplication.DEVELOPER_MODE)
+                                    Log.e(LOGTAG, "user == null");
+                            }
 
-				} else {
-					if (WalltyApplication.DEVELOPER_MODE)
-						Log.e(LOGTAG, "Ops. No Tokens");
-				}
-			} else {
-				if (WalltyApplication.DEVELOPER_MODE)
-					Log.e(LOGTAG, "No Internet. Sorry");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (WalltyApplication.DEVELOPER_MODE)
-				Log.e(LOGTAG, "Unexpected exception. Sorry");
-		}
-		// Release the wake lock provided by the BroadcastReceiver.
-		WalltyAlarmReceiver.completeWakefulIntent(intent);
+                        } else {
+                            if (WalltyApplication.DEVELOPER_MODE)
+                                Log.e(LOGTAG, "Ops. No Tokens");
+                        }
+                        break;
 
-	}
 
-	private void loadImage(final String url/* , final Bundle bundle */) {
+                    default:
 
-		Handler mainHandler = new Handler(WalltyApplication.getInstance().getMainLooper());
-		Runnable myRunnable = new Runnable() {
+                        JumblrClient client = WalltyApplication.getClient(getResources().getString(R.string.CONSUMER_KEY),
+                                getResources().getString(R.string.CONSUMER_SECRET));
+                        String lastSelectedBlog = sharedPrefs.getString(Constants.BLOG_SELECTED, "");
+                        Blog blog = client.blogInfo(lastSelectedBlog);
 
-			@Override
-			public void run() {
+//                        Log.e(TAG, " selected_blog MODE " + lastSelectedBlog);
 
-				WalltyApplication.getInstance().getImageLoader().get(url, new ImageListener() {
+                        if (blog != null) {
 
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						if (WalltyApplication.DEVELOPER_MODE)
-							Log.e(LOGTAG, "Image Load Error: " + error.getMessage());
-					}
+                            boolean success = false;
+                            int i = 0;
 
-					@Override
-					public void onResponse(ImageContainer response, boolean arg1) {
-						if (response.getBitmap() != null) {
+                            while (!success && i < 3) {
+                                if (WalltyApplication.DEVELOPER_MODE)
+                                    Log.e(LOGTAG, "user != null");
 
-							WallpaperManager mWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
-							try {
-								mWallpaperManager.setBitmap(response.getBitmap());
+                                Random rand = new Random();
+                                // nextInt is normally exclusive of the top
+                                // value, so add 1 to make it inclusive
 
-								try {
 
-									SharedPreferences sharedPrefs = getApplicationContext().getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
-									sharedPrefs = getApplicationContext().getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
-									SharedPreferences.Editor editor = sharedPrefs.edit();
-									editor.putString(Constants.LAST_LOADED_PICTURE, url);
-									editor.commit();
+                                Map<String, Integer> options = new HashMap<>();
+                                options.put("limit", WalltySettingsManager.getSelection(2));
+                                options.put("offset", 0);
 
-									Intent intent = new Intent(Constants.MESSAGE);
-									// intent.putExtra(Constants.MESSAGE_PIC_URL,
-									// url);
-									sendBroadcast(intent);
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
 
-							} catch (IOException e) {
-								if (WalltyApplication.DEVELOPER_MODE)
-									Log.e(LOGTAG, "failed to set wallpaper");
-								e.printStackTrace();
-							}
-						}
-					}
-				});
-			}
-		};
-		mainHandler.post(myRunnable);
-	}
+                                List<Post> posts;
+
+
+                                posts = blog.posts(options);
+                                if (WalltyApplication.DEVELOPER_MODE)
+                                    Log.e(LOGTAG, "posts  " + blog.getPostCount());
+
+                                int randomNum = rand.nextInt(posts.size());
+                                Post post = posts.get(randomNum);
+
+                                if (post.getType().equals("photo")) {
+                                    if (WalltyApplication.DEVELOPER_MODE)
+                                        Log.e(LOGTAG, "photoPost         : " + ((PhotoPost) post).getPhotos().size());
+                                    if (((PhotoPost) post).getPhotos().size() == 1) {
+                                        List<Photo> photos = ((PhotoPost) post).getPhotos();
+                                        for (final Photo photo : photos) {
+                                            if (WalltyApplication.DEVELOPER_MODE)
+                                                Log.e(LOGTAG, "photoSize      : " + photo.getOriginalSize().getUrl());
+                                            success = true;
+                                            loadImage(photo.getOriginalSize().getUrl());
+                                        }
+                                    } else {
+                                        Random randSet = new Random();
+                                        int randomNumSet = randSet.nextInt(((PhotoPost) post).getPhotos().size());
+                                        if (WalltyApplication.DEVELOPER_MODE)
+                                            Log.e(LOGTAG, "photoPost size  " + ((PhotoPost) post).getPhotos().size() + " photoPost   " + ((PhotoPost) post).getPhotos().get(randomNumSet).getOriginalSize().getUrl());
+                                        success = true;
+                                        loadImage(((PhotoPost) post).getPhotos().get(randomNumSet).getOriginalSize().getUrl());
+                                    }
+                                } else {
+                                    if (WalltyApplication.DEVELOPER_MODE)
+                                        Log.e(LOGTAG, "post " + post.getType());
+                                }
+
+                                i++;
+                            }
+                        } else {
+                            if (WalltyApplication.DEVELOPER_MODE)
+                                Log.e(LOGTAG, "blog == null");
+                        }
+                        break;
+                }
+            } else {
+                if (WalltyApplication.DEVELOPER_MODE)
+                    Log.e(LOGTAG, "No Internet. Sorry");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (WalltyApplication.DEVELOPER_MODE)
+                Log.e(LOGTAG, "Unexpected exception. Sorry");
+        }
+        // Release the wake lock provided by the BroadcastReceiver.
+        WalltyAlarmReceiver.completeWakefulIntent(intent);
+
+    }
+
+    private void loadImage(final String url/* , final Bundle bundle */) {
+
+        Handler mainHandler = new Handler(WalltyApplication.getInstance().getMainLooper());
+        Runnable myRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+
+                WalltyApplication.getInstance().getImageLoader().get(url, new ImageListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (WalltyApplication.DEVELOPER_MODE)
+                            Log.e(LOGTAG, "Image Load Error: " + error.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(ImageContainer response, boolean arg1) {
+                        if (response.getBitmap() != null) {
+
+                            WallpaperManager mWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
+                            try {
+                                mWallpaperManager.setBitmap(response.getBitmap());
+
+                                try {
+
+                                    SharedPreferences sharedPrefs = getApplicationContext().getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
+                                    sharedPrefs = getApplicationContext().getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                                    editor.putString(Constants.LAST_LOADED_PICTURE, url);
+                                    editor.commit();
+
+                                    Intent intent = new Intent(Constants.MESSAGE);
+                                    // intent.putExtra(Constants.MESSAGE_PIC_URL,
+                                    // url);
+                                    sendBroadcast(intent);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            } catch (IOException e) {
+                                if (WalltyApplication.DEVELOPER_MODE)
+                                    Log.e(LOGTAG, "failed to set wallpaper");
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+            }
+        };
+        mainHandler.post(myRunnable);
+    }
 }

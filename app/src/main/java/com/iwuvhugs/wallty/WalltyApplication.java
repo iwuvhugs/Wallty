@@ -1,11 +1,14 @@
 package com.iwuvhugs.wallty;
 
 import android.app.Application;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -26,10 +29,13 @@ public class WalltyApplication extends Application {
 
     public static final boolean DEVELOPER_MODE = false;
     public static final boolean TEST_INTERVAL = false;
+
     public static final CharSequence SHARED_LINK = "https://play.google.com/store/apps/details?id=com.iwuvhugs.wallty";
+
+    private static final String TAG = WalltyApplication.class.getSimpleName();
+
     //    public static final String BOTTOM_BANNER_ID = "ca-app-pub-5848359003337785/1347242553";
 //    public static final String INTERSTITIAL_BANNER_ID = "ca-app-pub-5848359003337785/2823975752";
-    private static final String TAG = WalltyApplication.class.getSimpleName();
     private static final String APP_OPENED_INTERSTITIAL = "app_opened_interstitial";
     private static final String USER_SEEN_INTERSTITIAL = "user_seen_interstitial";
     private static final String APP_OPENED_RATE_DIALOG = "app_opened_rate_dialog";
@@ -37,17 +43,16 @@ public class WalltyApplication extends Application {
     // The following line should be changed to include the correct property id.
     private static final String PROPERTY_ID = "UA-60315028-4";
     public static int GENERAL_TRACKER = 0;
+    public static Typeface dinRoundProRegular;
+    public static Typeface Nabila;
     private static WalltyApplication instance;
     private static JumblrClient client = null;
+    public String blogList[] = {"onetouchonelie.tumblr.com", "lookwhatifound.ru", "theclassyissue.com", "axarina.tumblr.com","iwuvhugs.tumblr.com"};
     HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
     //    private boolean allow_interstitial = false;
     private boolean allow_rate_dialog = false;
-
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-
-    public static Typeface dinRoundProRegular;
-
 
     public static synchronized WalltyApplication getInstance() {
         return instance;
@@ -65,7 +70,7 @@ public class WalltyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        
+
         initFonts();
 //        interstitialAppLaunchCounter();
         showRateDialogAppLaunchCounter();
@@ -75,6 +80,7 @@ public class WalltyApplication extends Application {
     private void initFonts() {
 
         dinRoundProRegular = Typeface.createFromAsset(getAssets(), "DINRoundPro-Regular.otf");
+        Nabila = Typeface.createFromAsset(getAssets(), "NABILA.TTF");
     }
 
     synchronized Tracker getTracker(TrackerName trackerId) {
@@ -98,11 +104,13 @@ public class WalltyApplication extends Application {
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(getApplicationContext());
         }
+//        Log.e(TAG, "" + mRequestQueue.getSequenceNumber());
 
         return mRequestQueue;
     }
 
     public ImageLoader getImageLoader() {
+//        Log.e(TAG, "getImageLoader");
         getRequestQueue();
         if (mImageLoader == null) {
             mImageLoader = new ImageLoader(this.mRequestQueue, new LruBitmapCache());
@@ -207,9 +215,32 @@ public class WalltyApplication extends Application {
         editor.commit();
     }
 
+    public void rateApp() {
+
+        Uri uri = Uri.parse("market://details?id=com.iwuvhugs.wallty");
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.iwuvhugs.wallty")));
+        }
+
+    }
+
+    public void shareWithFriends() {
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TITLE, getResources().getText(R.string.share_title));
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getText(R.string.share_title));
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getText(R.string.share_text) + "\n \n " + WalltyApplication.SHARED_LINK);
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.action_share)));
+    }
+
     /**
      * Enum used to identify the tracker that needs to be used for tracking.
-     * <p/>
+     * <p>
      * A single tracker is usually enough for most purposes. In case you do need
      * multiple trackers, storing them all in Application object helps ensure
      * that they are created only once per application instance.
@@ -222,4 +253,5 @@ public class WalltyApplication extends Application {
         // company.
 
     }
+
 }

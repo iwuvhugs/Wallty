@@ -1,0 +1,45 @@
+{
+  "project_info": {
+    "project_id": "wallty-9c08",
+    "project_number": "780217643671",
+    "name": "Wallty"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780217643671:android:76b5bbcfe0a159af",
+        "client_id": "android:com.iwuvhugs.wallty",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.iwuvhugs.wallty"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-60315028-4"
+          }
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

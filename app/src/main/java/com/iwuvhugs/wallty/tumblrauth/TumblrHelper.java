@@ -8,11 +8,6 @@ import android.content.SharedPreferences;
  */
 public class TumblrHelper {
 
-
-    // Taken from Tumblr app registration
-    public static final String CONSUMER_KEY = "4G2TUW0i25rqawkELVHclrmziwLgyu9uvZq4JE5Fr97PxRpu5Q";
-    public static final String CONSUMER_SECRET = "ir997lk7tNyOVDE0bUKFZafZDsdm1CTJvnjcy2isMAKQY4ozR6";
-
     // ====== TUMBLR HELPER METHODS ======
 
     public static boolean isConnected(Context ctx) {

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wallty</string>
+
+    <!-- Launch Activity -->
+    <string name="launch_button_login">Ik ben Tumblr gebruiker</string>
+    <string name="launch_button_guest">Voer zonder Tumblr rekening</string>
+    <string name="launch_button_discover">Ontdek Tumblr</string>
+
+    <!-- Main Activity -->
+    <string name="title_activity_main">Uw Tumblr</string>
+    <string name="username_avatar">userpic</string>
+    <string name="settings">Instellingen</string>
+    <string name="repeat">Herhaal elke:</string>
+    <string name="select">Selecteer willekeurig uit de laatste</string>
+    <string name="source">Picture bron</string>
+    <string name="likes">Favorieten</string>
+    <string name="followers">Volgers</string>
+    <string name="following">Volgend</string>
+    <string name="posts">Blogberichten</string>
+    <string name="get_new_wallpaper">Ontvang nieuwe wallpaper</string>
+    <string name="welcome">Welkom</string>
+
+
+    <!-- Main Activity Menu -->
+    <string name="action_settings">Instellingen</string>
+    <string name="action_logout">Afmelden</string>
+    <string name="action_update">Updaten</string>
+    <string name="action_rate_app">Beoordeel</string>
+    <string name="action_share">Aandeel</string>
+
+    <!-- Guest Activity -->
+    <string name="title_activity_guest">Welkom</string>
+    <string name="select_blog">Selecteer blog</string>
+
+    <!-- Share -->
+    <string name="share_text">Hello! Controleer of koele app</string>
+    <string name="share_title">Wallty</string>
+
+    <!-- Dialogs -->
+    <string name="please_wait">Wacht alstublieft</string>
+    <string name="info">Info</string>
+    <string name="check_internet">Controleer uw verbinding en probeer het opnieuw</string>
+    <string name="rate">Beoordeel Wallty</string>
+    <string name="rate_alert">Net als Wallty? U kunt app beter te maken. Deel een van uw ideeën in reacties of gewoon een moment nemen om te beoordelen. Bedankt voor de steun!</string>
+    <string name="newbie">Nieuw op Tumblr?</string>
+    <string name="newbie_alert">Je hebt weinig berichten voor Wallty om uit te kiezen. Volgen een aantal blogs, zoals en repost sommige posten en Wallty zal beter werken</string>
+    <string name="alert">Alarm</string>
+    <string name="auth_alert">Kan niet toestaan. Controleer uw apparaat tijd en tijdzone en stel juiste zijn (automatische tijd en tijdzone de voorkeur)</string>
+
+    <!-- Toasts -->
+    <string name="wallty_set">Wallty Set</string>
+    <string name="wallty_cancel">Wallty Annuleren</string>
+    <string name="wallty_fail_loading">Probeer een nieuwe wallpaper later laden</string>
+
+    <!-- Wallty settings -->
+    <string-array name="alarm_intervals">
+        <item>15 minuten</item>
+        <item>30 minuten</item>
+        <item>1 uur</item>
+        <item>halve dag</item>
+        <item>dag</item>
+    </string-array>
+    <string-array name="select_randomly_from">
+        <item>15 berichten</item>
+        <item>30 berichten</item>
+        <item>50 berichten</item>
+    </string-array>
+    <string-array name="pictures_source">
+        <item>je likes</item>
+        <item>dashboard</item>
+        <item>uw blog</item>
+    </string-array>
+
+</resources>

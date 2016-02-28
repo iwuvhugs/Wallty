@@ -3,7 +3,6 @@ package com.iwuvhugs.wallty;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.WallpaperManager;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -12,18 +11,23 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -31,10 +35,9 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +47,7 @@ import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.iwuvhugs.wallty.adapters.WalltyPagerAdapter;
 import com.iwuvhugs.wallty.dialogs.NewUserDialog;
 import com.iwuvhugs.wallty.dialogs.NoConnectionDialog;
 import com.iwuvhugs.wallty.dialogs.RateAppDialog;
@@ -51,7 +55,9 @@ import com.iwuvhugs.wallty.scheduledtasks.WalltyAlarmReceiver;
 import com.iwuvhugs.wallty.scheduledtasks.WalltyBootReceiver;
 import com.iwuvhugs.wallty.tumblrauth.Constants;
 import com.iwuvhugs.wallty.tumblrauth.TumblrHelper;
+import com.iwuvhugs.wallty.utils.Functions;
 import com.iwuvhugs.wallty.utils.WalltySettingsManager;
+import com.iwuvhugs.wallty.views.WalltyViewPager;
 import com.tumblr.jumblr.JumblrClient;
 import com.tumblr.jumblr.types.Photo;
 import com.tumblr.jumblr.types.PhotoPost;
@@ -70,63 +76,85 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private PendingIntent pendingIntent;
+    private BroadcastReceiver br;
 
     private String token;
     private String tokenSecret;
+
+    private ActionBar walltyActionBar;
+
+    /*User Layout*/
+    /*Username and userpic*/
+    private TextView usernameTextView;
+    private ImageView usernameAvatar;
+    /*User's figures views*/
+    private LinearLayout userInfoLayout;
+    private TextView followingCountTextView;
+    private TextView followersCountTextView;
+    private TextView blogsCountTextView;
+    private TextView likesCountTextView;
+    /*User progress bar*/
+    private ProgressBar progressBarUserInfo;
+
+    /*Switch Layout*/
+    private RelativeLayout switchLayout;
+    private SwitchCompat walltySwich;
+
+    /*ViewPager for New Wallpaper and Settings layouts*/
+    private ViewPager viewPager;
+    private PagerAdapter pagerAdapter;
+
+    /*ViewPager pages*/
+    private View newWallpaperPage;
+    private View settingsPage;
+
+    /*New Wallpaper page*/
+    private Button getNewWallpaperButton;
+    private ImageView lastLoadedPic;
+    private ProgressBar progressBarCurrentWallpaper;
+    private View currentWallpaperMask;
+
+
+    /*Settings page*/
+    private SeekBar wallty_seekBar;
+    private TextView wallty_seekBar_textView;
+    private Spinner wallty_spinner_selection;
+    private Spinner wallty_spinner_source;
+
+
+    /*User info for User's layout*/
+    private String avatarURL;
+    private String username;
+    private int followingCount = -1;
+    private int followersCount = -1;
+    private int blogPostsCount = -1;
+    private int likesCount = -1;
+
+    /*Switch mode*/
+    private boolean switched = false;
+    /*Last Wallpaper URL*/
+    private String lastURL;
+
+    /*Settings params*/
+    private int wallty_seekBar_position;
+    private String[] wallty_seekBar_states;
+    private int wallty_spinner_selection_position;
+    private int wallty_spinner_source_position;
 
 //    private LinearLayout ad_layout;
 //    private AdView adView;
 //    private InterstitialAd interstitial;
 
-    private LinearLayout user_info;
-    private LinearLayout wallty_settings;
-    private LinearLayout wallty_new_pic_loader;
+//    private LinearLayout wallty_settings;
+//    private LinearLayout wallty_new_pic_loader;
 
-    private ImageView username_avatar;
-    private ImageView last_loaded_pic;
-    private String lastURL;
+    private boolean alreadyHelped = false;
 
-    private Button get_new_wallpaper_button;
-
-    private TextView username_textView;
-    private TextView following_count_textView;
-    private TextView followers_count_textView;
-    private TextView blogs_count_textView;
-    private TextView likes_count_textView;
-
-    private String avatar_URL;
-    private String username;
-    private int following_count = -1;
-    private int followers_count = -1;
-    private int blog_posts_count = -1;
-    private int likes_count = -1;
-
-    private Switch wallty_swicher;
-    private boolean switched = false;
-
-    private SeekBar wallty_seekBar;
-    private TextView wallty_seekBar_textView;
-    private int wallty_seekBar_position;
-    private String[] wallty_seekBar_states;
-
-    private Spinner wallty_spinner_selection;
-    private int wallty_spinner_selection_position;
-
-    private Spinner wallty_spinner_source;
-    private int wallty_spinner_source_position;
-
-    private ProgressBar progressBar;
-    private ProgressBar progressBarCurrentWallpaper;
-
-    private BroadcastReceiver br;
-
-    private boolean already_helped = false;
-
+    /*Dialogs*/
     private AlertDialog noConnectionDialog;
     private AlertDialog newUserDialog;
     private AlertDialog rateAppDialog;
 
-//    private ActionBar wallty_ActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-//        initCustomActionBar();
+        initCustomActionBar();
         initViews();
 
         loadDataFromCache();
@@ -160,13 +188,13 @@ public class MainActivity extends AppCompatActivity {
                 if (WalltyApplication.DEVELOPER_MODE)
                     Log.e(TAG, "Recieve message from service");
 
+                //TODO
                 SharedPreferences sharedPrefs = getApplicationContext().getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
                 lastURL = sharedPrefs.getString(Constants.LAST_LOADED_PICTURE, "");
                 if (lastURL != null) {
                     if (!lastURL.equals(""))
                         setLastLoadedPic(lastURL);
                 }
-
             }
 
         };
@@ -178,14 +206,9 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null) {
             token = intent.getStringExtra(TumblrLoginActivity.TUMBLR_EXTRA_TOKEN);
             tokenSecret = intent.getStringExtra(TumblrLoginActivity.TUMBLR_EXTRA_TOKEN_SECRET);
-            // Log.e(TAG, "token              : " + token);
-            // Log.e(TAG, "tokenSecret        : " + tokenSecret);
-            // Log.e(TAG, "======================================");
             if (!(token.equals("")) && !(tokenSecret.equals("")))
                 if (WalltyApplication.getInstance().isOnline()) {
                     requestTumblrInfo(token, tokenSecret);
-                    // } else {
-                    // showNoInternetDialog();
                 }
         }
 
@@ -230,7 +253,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         if (!WalltyApplication.getInstance().isOnline()) {
-            // new Dialogs().showNoInternetDialog(this);
             if (noConnectionDialog != null) {
                 if (!noConnectionDialog.isShowing()) {
                     noConnectionDialog.show();
@@ -239,8 +261,31 @@ public class MainActivity extends AppCompatActivity {
                 noConnectionDialog = new NoConnectionDialog(this).getAlertDialog();
                 noConnectionDialog.show();
             }
-        } else {
-            // requestTumblrInfo(token, tokenSecret);
+        }
+
+        if (viewPager != null) {
+            ViewTreeObserver viewTreeObserver = viewPager.getViewTreeObserver();
+            viewTreeObserver
+                    .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+                        @Override
+                        public void onGlobalLayout() {
+
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                            int viewPagerWidth = viewPager.getWidth();
+                            float viewPagerHeight = (float) (viewPagerWidth);
+
+                            layoutParams.width = viewPagerWidth;
+                            layoutParams.height = (int) (viewPagerHeight + Functions.convertDpToPixel(26));
+
+                            viewPager.setLayoutParams(layoutParams);
+                            viewPager.getViewTreeObserver()
+                                    .removeOnGlobalLayoutListener(this);
+                        }
+                    });
         }
         super.onResume();
     }
@@ -270,88 +315,124 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPrefs = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
 
-        wallty_seekBar_states = getResources().getStringArray(R.array.alarm_intervals);
 //        ad_layout = (LinearLayout) findViewById(R.id.ad_layout);
 
-        user_info = (LinearLayout) findViewById(R.id.user_info_layout);
+        /*Uset Layout*/
+        /*Username and userpic*/
+        usernameTextView = (TextView) findViewById(R.id.username_textview);
+        usernameAvatar = (ImageView) findViewById(R.id.username_avatar);
+        /*User's figures*/
+        userInfoLayout = (LinearLayout) findViewById(R.id.user_info_layout);
+        followingCountTextView = (TextView) findViewById(R.id.your_followings_textview);
+        followersCountTextView = (TextView) findViewById(R.id.your_followers_textview);
+        blogsCountTextView = (TextView) findViewById(R.id.your_blogs_textview);
+        likesCountTextView = (TextView) findViewById(R.id.your_likes_textview);
+          /*User progress bar*/
+        progressBarUserInfo = (ProgressBar) findViewById(R.id.progressBar);
 
-        username_avatar = (ImageView) findViewById(R.id.username_avatar);
-        last_loaded_pic = (ImageView) findViewById(R.id.current_wallpaper);
+        /*Switch Layout*/
+        switchLayout = (RelativeLayout) findViewById(R.id.switch_layout);
+        walltySwich = (SwitchCompat) findViewById(R.id.wallty_switch);
+        switched = sharedPrefs.getBoolean(Constants.SCHEDULER_CHECKED, false);
+        walltySwich.setChecked(switched);
+
+        /*ViewPager for New Wallpaper and Settings layouts*/
+//        viewPagerContainer = (LinearLayout) findViewById(R.id.viewpager_layout);
+//        int width = viewPagerContainer.getWidth();
+//        viewPagerContainer.setLayoutParams(new LinearLayout.LayoutParams(width, width));
+
+//        viewPagerContainer.setMinimumHeight((int) Functions.convertDpToPixel(100));
+        viewPager = (WalltyViewPager) findViewById(R.id.wallty_view_pager);
+        newWallpaperPage = getLayoutInflater().inflate(R.layout.new_wallpaper_page, null);
+        settingsPage = getLayoutInflater().inflate(R.layout.settings_page, null);
+
+        List<View> pages = new ArrayList<View>();
+        pages.add(settingsPage);
+        pages.add(newWallpaperPage);
+
+        pagerAdapter = new WalltyPagerAdapter(pages);
+        viewPager.setAdapter(pagerAdapter);
+
+        if (switched) {
+            viewPager.setCurrentItem(1);
+        } else {
+            viewPager.setCurrentItem(0);
+        }
+
+        /*New Wallpaper page*/
+        getNewWallpaperButton = (Button) newWallpaperPage.findViewById(R.id.get_new_wallpaper);
+        getNewWallpaperButton.setTypeface(WalltyApplication.dinRoundProRegular);
+        lastLoadedPic = (ImageView) newWallpaperPage.findViewById(R.id.current_wallpaper);
+        progressBarCurrentWallpaper = (ProgressBar) newWallpaperPage.findViewById(R.id.progressBarCurrentWallpaper);
+        currentWallpaperMask = newWallpaperPage.findViewById(R.id.current_wallpaper_mask);
+
         lastURL = sharedPrefs.getString(Constants.LAST_LOADED_PICTURE, "");
         if (lastURL != null) {
             if (!lastURL.equals("")) {
                 setLastLoadedPic(lastURL);
+            } else {
+                lastLoadedPic.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_image));
             }
-        }
-
-        username_textView = (TextView) findViewById(R.id.username_textview);
-        following_count_textView = (TextView) findViewById(R.id.your_followings_textview);
-        followers_count_textView = (TextView) findViewById(R.id.your_followers_textview);
-        blogs_count_textView = (TextView) findViewById(R.id.your_blogs_textview);
-        likes_count_textView = (TextView) findViewById(R.id.your_likes_textview);
-
-        wallty_swicher = (Switch) findViewById(R.id.wallty_switcher);
-        switched = sharedPrefs.getBoolean(Constants.SCHEDULER_CHECKED, false);
-        wallty_swicher.setChecked(switched);
-
-        wallty_settings = (LinearLayout) findViewById(R.id.wallty_settings);
-        wallty_new_pic_loader = (LinearLayout) findViewById(R.id.wallty_new_pic_loader);
-        if (switched) {
-            wallty_settings.setVisibility(View.GONE);
-            wallty_new_pic_loader.setVisibility(View.VISIBLE);
         } else {
-            wallty_settings.setVisibility(View.VISIBLE);
-            wallty_new_pic_loader.setVisibility(View.GONE);
+            lastLoadedPic.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_image));
         }
 
-        wallty_seekBar = (SeekBar) findViewById(R.id.wallty_seekBar);
-        wallty_seekBar_textView = (TextView) findViewById(R.id.wallty_seekBar_textView);
+        /*Settings page*/
+        wallty_seekBar = (SeekBar) settingsPage.findViewById(R.id.wallty_seekBar);
+        wallty_seekBar_textView = (TextView) settingsPage.findViewById(R.id.wallty_seekBar_textView);
+
+        wallty_seekBar_states = getResources().getStringArray(R.array.alarm_intervals);
         wallty_seekBar_position = sharedPrefs.getInt(Constants.INTERVAL_SEEKBAR_POSITION, 1);
         wallty_seekBar.setProgress(wallty_seekBar_position);
         wallty_seekBar_textView.setText(wallty_seekBar_states[wallty_seekBar_position]);
 
-        wallty_spinner_selection = (Spinner) findViewById(R.id.wallty_spinner_selection);
+        wallty_spinner_selection = (Spinner) settingsPage.findViewById(R.id.wallty_spinner_selection);
         ArrayAdapter<CharSequence> adapter_selection = ArrayAdapter.createFromResource(this, R.array.select_randomly_from, R.layout.wallty_spinner_item);
-        adapter_selection.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter_selection.setDropDownViewResource(R.layout.wallty_spinner_dropdown_item);
         wallty_spinner_selection.setAdapter(adapter_selection);
         wallty_spinner_selection_position = sharedPrefs.getInt(Constants.SELECTION_SPINNER_POSITION, 1);
         wallty_spinner_selection.setSelection(wallty_spinner_selection_position);
 
-        wallty_spinner_source = (Spinner) findViewById(R.id.wallty_spinner_source);
+        wallty_spinner_source = (Spinner) settingsPage.findViewById(R.id.wallty_spinner_source);
         ArrayAdapter<CharSequence> adapter_source = ArrayAdapter.createFromResource(this, R.array.pictures_source, R.layout.wallty_spinner_item);
-        adapter_source.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter_source.setDropDownViewResource(R.layout.wallty_spinner_dropdown_item);
         wallty_spinner_source.setAdapter(adapter_source);
         wallty_spinner_source_position = sharedPrefs.getInt(Constants.PICTURES_SOURCE, 1);
         wallty_spinner_source.setSelection(wallty_spinner_source_position);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBarCurrentWallpaper = (ProgressBar) findViewById(R.id.progressBarCurrentWallpaper);
-
-        get_new_wallpaper_button = (Button) findViewById(R.id.get_new_wallpaper);
-
+//        wallty_settings = (LinearLayout) findViewById(R.id.wallty_settings);
+//        wallty_new_pic_loader = (LinearLayout) findViewById(R.id.wallty_new_pic_loader);
     }
 
-//    private void initCustomActionBar() {
-//
-//        wallty_ActionBar = getActionBar();
-//        wallty_ActionBar.setDisplayShowTitleEnabled(false);
-//
-//        LayoutInflater mInflater = LayoutInflater.from(this);
-//        View mCustomView = mInflater.inflate(R.layout.custom_acb_main, null);
-//
-//        wallty_ActionBar.setCustomView(mCustomView);
-//        wallty_ActionBar.setDisplayShowCustomEnabled(true);
-//
-//    }
+    private void initCustomActionBar() {
+
+        walltyActionBar = getSupportActionBar();
+        walltyActionBar.setDisplayShowTitleEnabled(false);
+        walltyActionBar.setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.actionbar_background, null));
+
+        LayoutInflater mInflater = LayoutInflater.from(this);
+        View mCustomView = mInflater.inflate(R.layout.custom_acb_main, null);
+        TextView actionbar_title = (TextView) mCustomView.findViewById(R.id.actionbar_title);
+//        if (getApplicationContext().getResources().getConfiguration().locale.getLanguage().equals(Locale.ENGLISH)) {
+        actionbar_title.setTypeface(WalltyApplication.Nabila);
+//        } else {
+//            actionbar_title.setTypeface(WalltyApplication.dinRoundProBold);
+//        }
+        actionbar_title.setText(getResources().getString(R.string.title_activity_main));
+
+        walltyActionBar.setCustomView(mCustomView);
+        walltyActionBar.setDisplayShowCustomEnabled(true);
+
+    }
 
     private void loadDataFromCache() {
         SharedPreferences sharedPrefs = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
         username = sharedPrefs.getString(Constants.PREF_KEY_USER_NAME, "");
-        avatar_URL = sharedPrefs.getString(Constants.PREF_KEY_USER_PICTURE, "");
-        blog_posts_count = sharedPrefs.getInt(Constants.PREF_KEY_USER_BLOGS, -1);
-        following_count = sharedPrefs.getInt(Constants.PREF_KEY_USER_FOLLOWINGS, -1);
-        followers_count = sharedPrefs.getInt(Constants.PREF_KEY_USER_FOLLOWERS, -1);
-        likes_count = sharedPrefs.getInt(Constants.PREF_KEY_USER_LIKES, -1);
+        avatarURL = sharedPrefs.getString(Constants.PREF_KEY_USER_PICTURE, "");
+        blogPostsCount = sharedPrefs.getInt(Constants.PREF_KEY_USER_BLOGS, -1);
+        followingCount = sharedPrefs.getInt(Constants.PREF_KEY_USER_FOLLOWINGS, -1);
+        followersCount = sharedPrefs.getInt(Constants.PREF_KEY_USER_FOLLOWERS, -1);
+        likesCount = sharedPrefs.getInt(Constants.PREF_KEY_USER_LIKES, -1);
 
     }
 
@@ -385,36 +466,40 @@ public class MainActivity extends AppCompatActivity {
 
     private void fillViewsWithData() {
         if (!(username.equals(""))) {
-            progressBar.setVisibility(View.GONE);
-            wallty_swicher.setVisibility(View.VISIBLE);
+            progressBarUserInfo.setVisibility(View.GONE);
+            switchLayout.setVisibility(View.VISIBLE);
             // wallty_settings.setVisibility(View.VISIBLE);
-            username_textView.setText(getResources().getString(R.string.welcome) + " " + username + "!");
+            usernameTextView.setText(getResources().getString(R.string.welcome) + " " + username + "!");
+            usernameTextView.animate().setDuration(500).alpha(1f);
         } else {
-            progressBar.setVisibility(View.VISIBLE);
-            wallty_swicher.setVisibility(View.INVISIBLE);
+            progressBarUserInfo.setVisibility(View.VISIBLE);
+            switchLayout.setVisibility(View.INVISIBLE);
             // wallty_settings.setVisibility(View.INVISIBLE);
         }
 
-        if (blog_posts_count != (-1) || following_count != (-1) || followers_count != (-1) || likes_count != (-1)) {
+        if (blogPostsCount != (-1) || followingCount != (-1) || followersCount != (-1) || likesCount != (-1)) {
 
-            blogs_count_textView.setText("" + blog_posts_count);
-            following_count_textView.setText("" + following_count);
-            followers_count_textView.setText("" + followers_count);
-            likes_count_textView.setText("" + likes_count);
 
-            user_info.setVisibility(View.VISIBLE);
+            blogsCountTextView.setText("" + blogPostsCount);
+            followingCountTextView.setText("" + followingCount);
+            followersCountTextView.setText("" + followersCount);
+            likesCountTextView.setText("" + likesCount);
+
+            userInfoLayout.setVisibility(View.VISIBLE);
+            userInfoLayout.animate().setDuration(500).alpha(1f);
+
         }
 
-        if (!avatar_URL.equals("")) {
-            loadUserPic(avatar_URL);
+        if (!avatarURL.equals("")) {
+            loadUserPic(avatarURL);
         }
 
     }
 
     private void helpNewbie() {
 
-        if (!already_helped)
-            if (blog_posts_count < 10 || following_count == 0 || likes_count < 10) {
+        if (!alreadyHelped)
+            if (blogPostsCount < 10 || followingCount == 0 || likesCount < 10) {
 
                 if (newUserDialog != null) {
                     if (!newUserDialog.isShowing()) {
@@ -424,21 +509,25 @@ public class MainActivity extends AppCompatActivity {
                     newUserDialog = new NewUserDialog(this);
                     newUserDialog.show();
                 }
-                // new Dialogs().showNewUserDialog(this);
-                already_helped = true;
+                alreadyHelped = true;
             }
     }
 
     private void setListeners() {
-        wallty_swicher.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        walltySwich.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    viewPager.setCurrentItem(1);
                     start();
-                    loadPicAndSetWallpaper();
-                    wallty_settings.setVisibility(View.GONE);
-                    wallty_new_pic_loader.setVisibility(View.VISIBLE);
+
+                    if (progressBarCurrentWallpaper != null) {
+                        progressBarCurrentWallpaper.setVisibility(View.VISIBLE);
+                        currentWallpaperMask.animate().setDuration(250).alpha(0.7f);
+                    }
+
+//                    loadPicAndSetWallpaper();
 
                     if (!WalltyApplication.getInstance().isOnline()) {
                         if (noConnectionDialog != null) {
@@ -454,9 +543,9 @@ public class MainActivity extends AppCompatActivity {
                     helpNewbie();
 
                 } else {
+                    viewPager.setCurrentItem(0);
                     cancel();
-                    wallty_settings.setVisibility(View.VISIBLE);
-                    wallty_new_pic_loader.setVisibility(View.GONE);
+
 //                    displayInterstitial();
                 }
                 switched = isChecked;
@@ -468,7 +557,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        wallty_seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+        wallty_seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -489,7 +578,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        wallty_spinner_selection.setOnItemSelectedListener(new OnItemSelectedListener() {
+        wallty_spinner_selection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -506,7 +595,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        wallty_spinner_source.setOnItemSelectedListener(new OnItemSelectedListener() {
+        wallty_spinner_source.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -525,14 +614,17 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        get_new_wallpaper_button.setOnClickListener(new OnClickListener() {
+        getNewWallpaperButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 helpNewbie();
 //                displayInterstitial();
-                if (progressBarCurrentWallpaper != null)
+                if (progressBarCurrentWallpaper != null) {
                     progressBarCurrentWallpaper.setVisibility(View.VISIBLE);
+                    currentWallpaperMask.animate().setDuration(250).alpha(0.7f);
+                }
+
                 if (WalltyApplication.getInstance().isOnline()) {
                     loadPicAndSetWallpaper();
                 } else {
@@ -546,8 +638,10 @@ public class MainActivity extends AppCompatActivity {
                         noConnectionDialog.show();
                     }
 
-                    if (progressBarCurrentWallpaper != null)
+                    if (progressBarCurrentWallpaper != null) {
                         progressBarCurrentWallpaper.setVisibility(View.INVISIBLE);
+                        currentWallpaperMask.animate().setDuration(250).alpha(0f);
+                    }
                 }
             }
         });
@@ -560,35 +654,32 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     // get user informations
-                    JumblrClient client = WalltyApplication.getClient(TumblrHelper.CONSUMER_KEY, TumblrHelper.CONSUMER_SECRET);
+                    JumblrClient client = WalltyApplication.getClient(getResources().getString(R.string.CONSUMER_KEY), getResources().getString(R.string.CONSUMER_SECRET));
                     client.setToken(token, tokenSecret);
 
                     User user = client.user();
 
                     if (user != null) {
 
-                        avatar_URL = user.getBlogs().get(0).avatar();
-                        loadUserPic(avatar_URL);
+                        avatarURL = user.getBlogs().get(0).avatar();
+                        loadUserPic(avatarURL);
 
                         username = user.getName();
-                        blog_posts_count = user.getBlogs().get(0).getPostCount();
-                        following_count = user.getFollowingCount();
-                        // followers_count = 0;
-                        // for (int i = 0; i < user.getBlogs().size(); i++) {
-                        followers_count = user.getBlogs().get(0).getFollowersCount();
-                        // }
-                        likes_count = user.getLikeCount();
+                        blogPostsCount = user.getBlogs().get(0).getPostCount();
+                        followingCount = user.getFollowingCount();
+                        followersCount = user.getBlogs().get(0).getFollowersCount();
+                        likesCount = user.getLikeCount();
 
                         updateUI();
 
                         SharedPreferences sharedPrefs = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPrefs.edit();
                         editor.putString(Constants.PREF_KEY_USER_NAME, username);
-                        editor.putString(Constants.PREF_KEY_USER_PICTURE, avatar_URL);
-                        editor.putInt(Constants.PREF_KEY_USER_BLOGS, blog_posts_count);
-                        editor.putInt(Constants.PREF_KEY_USER_FOLLOWINGS, following_count);
-                        editor.putInt(Constants.PREF_KEY_USER_FOLLOWERS, followers_count);
-                        editor.putInt(Constants.PREF_KEY_USER_LIKES, likes_count);
+                        editor.putString(Constants.PREF_KEY_USER_PICTURE, avatarURL);
+                        editor.putInt(Constants.PREF_KEY_USER_BLOGS, blogPostsCount);
+                        editor.putInt(Constants.PREF_KEY_USER_FOLLOWINGS, followingCount);
+                        editor.putInt(Constants.PREF_KEY_USER_FOLLOWERS, followersCount);
+                        editor.putInt(Constants.PREF_KEY_USER_LIKES, likesCount);
                         editor.apply();
 
                     }
@@ -620,8 +711,10 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void run() {
-                                if (username_avatar != null)
-                                    username_avatar.setImageBitmap(avatar);
+                                if (usernameAvatar != null) {
+                                    usernameAvatar.setImageBitmap(avatar);
+                                    usernameAvatar.animate().setDuration(500).alpha(1f);
+                                }
                             }
                         });
                     }
@@ -690,7 +783,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -721,46 +814,22 @@ public class MainActivity extends AppCompatActivity {
                     requestTumblrInfo(token, tokenSecret);
                 break;
             case R.id.action_rate_app:
-
-                rateApp();
-
+                WalltyApplication.getInstance().rateApp();
                 break;
             case R.id.action_share:
-
-                shareWithFriends();
-
+                WalltyApplication.getInstance().shareWithFriends();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void rateApp() {
-
-        Uri uri = Uri.parse("market://details?id=com.iwuvhugs.wallty");
-        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        try {
-            startActivity(goToMarket);
-        } catch (ActivityNotFoundException e) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.iwuvhugs.wallty")));
-        }
-
-    }
-
-    private void shareWithFriends() {
-
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TITLE, getResources().getText(R.string.share_title));
-        sendIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getText(R.string.share_title));
-        sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getText(R.string.share_text) + "\n \n " + WalltyApplication.SHARED_LINK);
-        sendIntent.setType("text/plain");
-        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.action_share)));
-    }
 
     private void loadPicAndSetWallpaper() {
 
-        if (progressBarCurrentWallpaper != null)
+        if (progressBarCurrentWallpaper != null) {
             progressBarCurrentWallpaper.setVisibility(View.VISIBLE);
+            currentWallpaperMask.animate().setDuration(250).alpha(0.7f);
+        }
 
         new Thread(new Runnable() {
             @Override
@@ -769,7 +838,8 @@ public class MainActivity extends AppCompatActivity {
                     if (WalltyApplication.getInstance().isOnline()) {
                         if (!(TumblrHelper.getToken(getApplicationContext()).equals("")) && !(TumblrHelper.getTokenSecret(getApplicationContext()).equals(""))) {
 
-                            JumblrClient client = WalltyApplication.getClient(TumblrHelper.CONSUMER_KEY, TumblrHelper.CONSUMER_SECRET);
+                            JumblrClient client = WalltyApplication.getClient(getResources().getString(R.string.CONSUMER_KEY),
+                                    getResources().getString(R.string.CONSUMER_SECRET));
                             client.setToken(token, tokenSecret);
 
                             User user = client.user();
@@ -883,52 +953,70 @@ public class MainActivity extends AppCompatActivity {
 
                 WalltyApplication.getInstance().getImageLoader().get(url, new ImageListener() {
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (WalltyApplication.DEVELOPER_MODE)
-                            Log.e(TAG, "Image Load Error: " + error.getMessage());
-                    }
-
-                    @Override
-                    public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
-                        if (response.getBitmap() != null) {
-
-                            WallpaperManager mWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
-
-                            // try {
-
-                            SharedPreferences sharedPrefs = getApplicationContext().getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPrefs.edit();
-                            editor.putString(Constants.LAST_LOADED_PICTURE, url);
-                            editor.apply();
-
-                            if (progressBarCurrentWallpaper != null)
-                                progressBarCurrentWallpaper.setVisibility(View.INVISIBLE);
-
-                            // Intent intent = new Intent(Constants.MESSAGE);
-                            // // intent.putExtra(Constants.MESSAGE_PIC_URL,
-                            // // url);
-                            // sendBroadcast(intent);
-                            // } catch (Exception e) {
-                            // e.printStackTrace();
-                            // }
-
-                            try {
-                                mWallpaperManager.setBitmap(response.getBitmap());
-
-                                if (last_loaded_pic != null) {
-                                    last_loaded_pic.setImageBitmap(response.getBitmap());
-                                }
-
-                            } catch (IOException e) {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
                                 if (WalltyApplication.DEVELOPER_MODE)
-                                    Log.e(TAG, "failed to set wallpaper");
-                                e.printStackTrace();
+                                    Log.e(TAG, "Image Load Error: " + error.getMessage());
                             }
 
+                            @Override
+                            public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
+                                if (response.getBitmap() != null) {
+                                    final Bitmap bitmap = response.getBitmap();
+
+
+                                    // try {
+
+                                    SharedPreferences sharedPrefs = getApplicationContext().getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                                    editor.putString(Constants.LAST_LOADED_PICTURE, url);
+                                    editor.apply();
+
+                                    if (progressBarCurrentWallpaper != null) {
+                                        progressBarCurrentWallpaper.setVisibility(View.INVISIBLE);
+                                        currentWallpaperMask.animate().setDuration(250).alpha(0f);
+                                    }
+
+                                    // Intent intent = new Intent(Constants.MESSAGE);
+                                    // // intent.putExtra(Constants.MESSAGE_PIC_URL,
+                                    // // url);
+                                    // sendBroadcast(intent);
+                                    // } catch (Exception e) {
+                                    // e.printStackTrace();
+                                    // }
+
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            WallpaperManager mWallpaperManager = WallpaperManager.getInstance(getApplicationContext());
+                                            try {
+                                                mWallpaperManager.setBitmap(bitmap);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }).start();
+
+
+//                            try {
+//                                mWallpaperManager.setBitmap(response.getBitmap());
+
+                                    if (lastLoadedPic != null) {
+                                        lastLoadedPic.setImageBitmap(bitmap);
+                                    }
+
+//                            } catch (IOException e) {
+//                                if (WalltyApplication.DEVELOPER_MODE)
+//                                    Log.e(TAG, "failed to set wallpaper");
+//                                e.printStackTrace();
+//                            }
+
+                                }
+                            }
                         }
-                    }
-                });
+
+                );
             }
         };
         mainHandler.post(myRunnable);
@@ -949,8 +1037,10 @@ public class MainActivity extends AppCompatActivity {
                         if (WalltyApplication.DEVELOPER_MODE)
                             Log.e(TAG, "Image Load Error: " + error.getMessage());
 
-                        if (progressBarCurrentWallpaper != null)
+                        if (progressBarCurrentWallpaper != null) {
                             progressBarCurrentWallpaper.setVisibility(View.INVISIBLE);
+                            currentWallpaperMask.animate().setDuration(250).alpha(0f);
+                        }
 
                     }
 
@@ -958,11 +1048,13 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                         if (response.getBitmap() != null) {
 
-                            if (progressBarCurrentWallpaper != null)
+                            if (progressBarCurrentWallpaper != null) {
                                 progressBarCurrentWallpaper.setVisibility(View.INVISIBLE);
+                                currentWallpaperMask.animate().setDuration(250).alpha(0f);
+                            }
 
-                            if (last_loaded_pic != null) {
-                                last_loaded_pic.setImageBitmap(response.getBitmap());
+                            if (lastLoadedPic != null) {
+                                lastLoadedPic.setImageBitmap(response.getBitmap());
                             }
                         }
                     }
@@ -999,7 +1091,6 @@ public class MainActivity extends AppCompatActivity {
                         rateAppDialog = new RateAppDialog(MainActivity.this);
                         rateAppDialog.show();
                     }
-                    // new Dialogs().showRateAppDialog(MainActivity.this);
                 }
             }, 1000);
         }

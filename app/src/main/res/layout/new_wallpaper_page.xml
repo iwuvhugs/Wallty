@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/wallty_new_pic_loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/page_background"
+        android:orientation="vertical">
+        <!--        android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="8dp"-->
+
+        <Button
+            android:id="@+id/get_new_wallpaper"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/green_button"
+            android:gravity="center"
+            android:text="@string/get_new_wallpaper"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp">
+
+
+            <com.iwuvhugs.wallty.views.SquareImageView
+                android:id="@+id/current_wallpaper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:layout_alignParentTop="true" />
+
+            <View
+                android:id="@+id/current_wallpaper_mask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/current_wallpaper"
+                android:layout_alignLeft="@+id/current_wallpaper"
+                android:layout_alignRight="@+id/current_wallpaper"
+                android:layout_alignTop="@+id/current_wallpaper"
+                android:alpha="0"
+                android:background="@android:color/white" />
+
+            <ProgressBar
+                android:id="@+id/progressBarCurrentWallpaper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:indeterminate="false"
+                android:visibility="invisible" />
+        </RelativeLayout>
+        <!---->
+
+    </LinearLayout>
+</RelativeLayout>

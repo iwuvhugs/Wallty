@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wallty</string>
+
+    <!-- Launch Activity -->
+    <string name="launch_button_login">나는 Tumblr 사용자 해요</string>
+    <string name="launch_button_guest">Tumblr 계정없이 입력</string>
+    <string name="launch_button_discover">검색 Tumblr</string>
+
+    <!-- Main Activity -->
+    <string name="title_activity_main">귀하의 Tumblr</string>
+    <string name="username_avatar">userpic</string>
+    <string name="settings">설정</string>
+    <string name="repeat">모든 반복</string>
+    <string name="select">마지막에서 임의로 선택</string>
+    <string name="source">사진 소스</string>
+    <string name="likes">좋아요</string>
+    <string name="followers">팔로워</string>
+    <string name="following">팔로잉</string>
+    <string name="posts">포스트</string>
+    <string name="get_new_wallpaper">새로운 배경 화면을 가져 오기</string>
+    <string name="welcome">환영</string>
+
+
+    <!-- Main Activity Menu -->
+    <string name="action_settings">설정</string>
+    <string name="action_logout">로그아웃</string>
+    <string name="action_update">새롭게하다</string>
+    <string name="action_rate_app">율</string>
+    <string name="action_share">몫</string>
+
+    <!-- Guest Activity -->
+    <string name="title_activity_guest">환영</string>
+    <string name="select_blog">선택의 블로그</string>
+
+    <!-- Share -->
+    <string name="share_text">안녕하세요! 이 멋진 응용 프로그램을 확인</string>
+    <string name="share_title">Wallty</string>
+
+    <!-- Dialogs -->
+    <string name="please_wait">기다려주십시오</string>
+    <string name="info">정보</string>
+    <string name="check_internet">연결을 확인하고 다시 시도하십시오</string>
+    <string name="rate">속도 Wallty</string>
+    <string name="rate_alert">Wallty처럼? 당신은 응용 프로그램을 더 만들 수 있습니다. 의견 당신의 아이디어 중 하나를 공유하거나 속도에 잠시 시간을내어. 지원 주셔서 감사합니다!</string>
+    <string name="newbie">Tumblr에 새로운?</string>
+    <string name="newbie_alert">당신은 선택할 수 Wallty에 대한 약간의 게시물이 있습니다. 어떤 블로그를 따라, 같은 일부 게시물을 다시 게시 및 Wallty이 더 잘 작동합니다</string>
+    <string name="alert">경보</string>
+    <string name="auth_alert">권한을 부여 할 수 없습니다. 장치의 시간 및 시간대 설정하고 올바른 사람을 (자동 시간 및 시간대가 바람직하다) 확인</string>
+
+    <!-- Toasts -->
+    <string name="wallty_set">Wallty 설정</string>
+    <string name="wallty_cancel">취소 Wallty</string>
+    <string name="wallty_fail_loading">나중에 새로운 배경 화면을로드하려고</string>
+
+    <!-- Wallty settings -->
+    <string-array name="alarm_intervals">
+        <item>15분</item>
+        <item>30분</item>
+        <item>1시간</item>
+        <item>반나절</item>
+        <item>하루</item>
+    </string-array>
+    <string-array name="select_randomly_from">
+        <item>15포스트</item>
+        <item>30포스트</item>
+        <item>50포스트</item>
+    </string-array>
+    <string-array name="pictures_source">
+        <item>좋아요</item>
+        <item>대시보드</item>
+        <item>귀하의 블로그</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wallty</string>
+
+    <!-- Launch Activity -->
+    <string name="launch_button_login">我Tumblr用户</string>
+    <string name="launch_button_guest">输入时不带Tumblr账户</string>
+    <string name="launch_button_discover">发现Tumblr</string>
+
+    <!-- Main Activity -->
+    <string name="title_activity_main">您Tumblr</string>
+    <string name="username_avatar">userpic</string>
+    <string name="settings">设置</string>
+    <string name="repeat">每天重复</string>
+    <string name="select">从上随机选择</string>
+    <string name="source">图片来源</string>
+    <string name="likes">喜欢</string>
+    <string name="followers">粉丝</string>
+    <string name="following">关注</string>
+    <string name="posts">帖子</string>
+    <string name="get_new_wallpaper">获取新壁纸</string>
+    <string name="welcome">欢迎</string>
+
+
+    <!-- Main Activity Menu -->
+    <string name="action_settings">设置</string>
+    <string name="action_logout">退出</string>
+    <string name="action_update">刷新</string>
+    <string name="action_rate_app">率</string>
+    <string name="action_share">共享</string>
+
+    <!-- Guest Activity -->
+    <string name="title_activity_guest">Welcome</string>
+    <string name="select_blog">选择博客</string>
+
+    <!-- Share -->
+    <string name="share_text">您好！检查应用程序爽</string>
+    <string name="share_title">Wallty</string>
+
+    <!-- Dialogs -->
+    <string name="please_wait">请稍候</string>
+    <string name="info">信息</string>
+    <string name="check_internet">检查您的连接，然后再试一次</string>
+    <string name="rate">率Wallty</string>
+    <string name="rate_alert">像Wallty？你可以让应用更好。分享你的任何想法，意见或只是花点时间率。感谢您的支持！</string>
+    <string name="newbie">新的Tumblr？</string>
+    <string name="newbie_alert">你很少职位Wallty可供选择。按照一些博客，喜欢和重新发布一些帖子，并Wallty将工作做得更好</string>
+    <string name="alert">警报</string>
+    <string name="auth_alert">不能授权。请检查您的设备的时间和时区，并设置正确的人（自动时间和时区是优选的）</string>
+
+    <!-- Toasts -->
+    <string name="wallty_set">Wallty集</string>
+    <string name="wallty_cancel">Wallty取消</string>
+    <string name="wallty_fail_loading">稍后再尝试加载新壁纸</string>
+
+    <!-- Wallty settings -->
+    <string-array name="alarm_intervals">
+        <item>15分钟</item>
+        <item>30分钟</item>
+        <item>1小时</item>
+        <item>半天</item>
+        <item>天</item>
+    </string-array>
+    <string-array name="select_randomly_from">
+        <item>15个职位</item>
+        <item>30个职位</item>
+        <item>50个职位</item>
+    </string-array>
+    <string-array name="pictures_source">
+        <item>自己的喜爱</item>
+        <item>首页</item>
+        <item>您的博客</item>
+    </string-array>
+
+</resources>

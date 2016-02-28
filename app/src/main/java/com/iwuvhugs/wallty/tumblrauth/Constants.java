@@ -50,6 +50,7 @@ public class Constants {
     public static final String INTERVAL_SEEKBAR_POSITION = "interval_seekbar_position";
     public static final String SELECTION_SPINNER_POSITION = "selection_spinner_position";
     public static final String PICTURES_SOURCE = "pictures_source";
+    public static final String BLOG_SELECTED = "blog_selected";
     //
 
     // MESSENGER PROVIDES CONNECTION BETWEEN SERVICE AND MAON ACTIVITY

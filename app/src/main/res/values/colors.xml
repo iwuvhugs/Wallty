@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent_green">#67ca02</color>
+    <color name="accent_green_dark">#5ab102</color>
+
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+
+    <color name="blue_primary_dark">#095db1</color>
+    <color name="blue_primary">#1c70c3</color>
+
+    <color name="neutral">#f0f3f5</color>
+
+    <color name="divider">#b6b6b6</color>
+
+    <color name="twenty_percent_white">#32ffffff</color>
+
+</resources>

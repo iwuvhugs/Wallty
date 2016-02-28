@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wallty</string>
+
+    <!-- Launch Activity -->
+    <string name="launch_button_login">Sono utente Tumblr</string>
+    <string name="launch_button_guest">Immettere senza conto Tumblr</string>
+    <string name="launch_button_discover">Scopri Tumblr</string>
+
+    <!-- Main Activity -->
+    <string name="title_activity_main">Il tuo Tumblr</string>
+    <string name="username_avatar">userpic</string>
+    <string name="settings">Impostazioni</string>
+    <string name="repeat">Ripeti ogni:</string>
+    <string name="select">Scegli casualmente da ultimo</string>
+    <string name="source">Fonte picture</string>
+    <string name="likes">Post piaciuti</string>
+    <string name="followers">Lettori</string>
+    <string name="following">Sto seguendo</string>
+    <string name="posts">Post</string>
+    <string name="get_new_wallpaper">Get un nuovo sfondor</string>
+    <string name="welcome">Benvenuto</string>
+
+
+    <!-- Main Activity Menu -->
+    <string name="action_settings">Impostazioni</string>
+    <string name="action_logout">Esci</string>
+    <string name="action_update">Aggiornare</string>
+    <string name="action_rate_app">Votare</string>
+    <string name="action_share">Condividere</string>
+
+    <!-- Guest Activity -->
+    <string name="title_activity_guest">Accoglienza</string>
+    <string name="select_blog">Selezionare blog</string>
+
+    <!-- Share -->
+    <string name="share_text">Ciao! Controllare che app fresco</string>
+    <string name="share_title">Wallty</string>
+
+    <!-- Dialogs -->
+    <string name="please_wait">Attendere prego</string>
+    <string name="info">Info</string>
+    <string name="check_internet">Controlla la connessione e riprovare</string>
+    <string name="rate">Vota Wallty</string>
+    <string name="rate_alert">Come Wallty? Potete fare app migliore. Condividi le tue idee nei commenti o semplicemente prendere un momento per votare. Grazie per il supporto!</string>
+    <string name="newbie">Nuovo su Tumblr?</string>
+    <string name="newbie_alert">Hai piccoli posti per Wallty cui scegliere. Seguire alcuni blog, come e ripubblicare alcuni post e Wallty funzionerà meglio</string>
+    <string name="alert">Allarme</string>
+    <string name="auth_alert">Non può autorizzare. Controlla il tuo tempo dispositivo e fuso orario e quelli corretti set (tempo automatico e fuso orario sono preferibili)</string>
+
+    <!-- Toasts -->
+    <string name="wallty_set">Wallty Set</string>
+    <string name="wallty_cancel">Wallty Annulla</string>
+    <string name="wallty_fail_loading">Provate a caricare un nuovo sfondo tardi</string>
+
+    <!-- Wallty settings -->
+    <string-array name="alarm_intervals">
+        <item>15 minuti</item>
+        <item>30 minuti</item>
+        <item>1 ora</item>
+        <item>mezza giornata</item>
+        <item>giorno</item>
+    </string-array>
+    <string-array name="select_randomly_from">
+        <item>15 posti</item>
+        <item>30 posti</item>
+        <item>50 posti</item>
+    </string-array>
+    <string-array name="pictures_source">
+        <item>post piaciuti</item>
+        <item>dashboard</item>
+        <item>il tuo blog</item>
+    </string-array>
+
+</resources>

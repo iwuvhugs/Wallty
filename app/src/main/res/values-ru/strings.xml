@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wallty</string>
+
+    <!-- Launch Activity -->
+    <string name="launch_button_login">Я пользователь Tumblr</string>
+    <string name="launch_button_guest">Войти без аккаунта Tumblr</string>
+    <string name="launch_button_discover">Открыть для себя Tumblr</string>
+
+    <!-- Main Activity -->
+    <string name="title_activity_main">Tumblr</string>
+    <string name="username_avatar">userpic</string>
+    <string name="settings">Настройки</string>
+    <string name="repeat">Повторять раз в:</string>
+    <string name="select">Случайно выбирать из:</string>
+    <string name="source">Источник картинок:</string>
+    <string name="likes">Понравившиеся</string>
+    <string name="followers">Читатели</string>
+    <string name="following">Читаемые</string>
+    <string name="posts">Посты</string>
+    <string name="get_new_wallpaper">Новые обои</string>
+    <string name="welcome">Привет,</string>
+
+
+    <!-- Main Activity Menu -->
+    <string name="action_settings">Настройки</string>
+    <string name="action_logout">Выйти</string>
+    <string name="action_update">Обновить</string>
+    <string name="action_rate_app">Оценить</string>
+    <string name="action_share">Поделиться</string>
+
+    <!-- Guest Activity -->
+    <string name="title_activity_guest">Welcome</string>
+    <string name="select_blog">Выберите блог:</string>
+
+    <!-- Share -->
+    <string name="share_text">Привет! Зацени крутое приложение</string>
+    <string name="share_title">Wallty</string>
+
+    <!-- Dialogs -->
+    <string name="please_wait">Пожалуйста, подождите</string>
+    <string name="info">Информация</string>
+    <string name="check_internet">Проверьте интернет соединение и попробуйте снова</string>
+    <string name="rate">Оцените Wallty</string>
+    <string name="rate_alert">Нравится Wallty? Вы можете сделать его лучше. Поделитесь любой вашей идее в комментариях или просто поставте оценку. Спасибо за поддержку!</string>
+    <string name="newbie">Новенький в Tumblr?</string>
+    <string name="newbie_alert">У вас недостаточно постов, чтобы Wallty смог что-нибудь выбрать. Подпишитесь на несколько блогов, лайкните или сделайте реблог нескольких постов для лучшей работы Wallty</string>
+    <string name="alert">Внимание</string>
+    <string name="auth_alert">Не удаётся авторизироваться. Проверьте и в случае необходимости установите правильные дату, время и часовой пояс (лучше выберите установку автоматически)</string>
+
+    <!-- Toasts -->
+    <string name="wallty_set">Wallty запущен</string>
+    <string name="wallty_cancel">Wallty остановлен</string>
+    <string name="wallty_fail_loading">Попробуйте загрузить новые обои позднее</string>
+
+    <!-- Wallty settings -->
+    <string-array name="alarm_intervals">
+        <item>15 минут</item>
+        <item>30 минут</item>
+        <item>1 час</item>
+        <item>полдня</item>
+        <item>день</item>
+    </string-array>
+    <string-array name="select_randomly_from">
+        <item>15 постов</item>
+        <item>30 постов</item>
+        <item>50 постов</item>
+    </string-array>
+    <string-array name="pictures_source">
+        <item>понравившееся</item>
+        <item>лента</item>
+        <item>ваш блог</item>
+    </string-array>
+
+</resources>

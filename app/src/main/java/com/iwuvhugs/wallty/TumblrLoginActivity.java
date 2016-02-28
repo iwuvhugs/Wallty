@@ -306,7 +306,7 @@ public class TumblrLoginActivity extends Activity {
                             mProgressDialog.cancel();
 
                             if (WalltyApplication.DEVELOPER_MODE)
-                                Log.e(TAG, "" + errorString.toString());
+                                Log.e(TAG, "" + errorString);
 
                             TumblrLoginActivity.this.setResult(TUMBLR_LOGIN_RESULT_CODE_FAILURE);
                             TumblrLoginActivity.this.finish();

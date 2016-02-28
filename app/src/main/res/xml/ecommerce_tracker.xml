@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyDashes">
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="TypographyDashes">
 
     <integer name="ga_sessionTimeout">300</integer>
 
@@ -15,10 +16,10 @@
     <!-- how often the dispatcher should fire -->
     <integer name="ga_dispatchPeriod">30</integer>
 
-    <!-- The screen names that will appear in reports -->
-    <screenName name="com.iwuvhugs.wallty.LaunchActivity">Launch Activity</screenName>
-    <screenName name="com.iwuvhugs.wallty.TumblrLoginActivity">Tumblr Login Activity</screenName>
-    <screenName name="com.iwuvhugs.wallty.MainActivity">Wallty Main Activity</screenName>
+    <!--    &lt;!&ndash; The screen names that will appear in reports &ndash;&gt;
+        <screenName name="com.iwuvhugs.wallty.LaunchActivity">Launch Activity</screenName>
+        <screenName name="com.iwuvhugs.wallty.TumblrLoginActivity">Tumblr Login Activity</screenName>
+        <screenName name="com.iwuvhugs.wallty.MainActivity">Wallty Main Activity</screenName>-->
 
     <!-- The following value should be replaced with correct property id. -->
     <string name="ga_trackingId">UA-60315028-4</string>
